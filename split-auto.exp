@@ -1,0 +1,27 @@
+#!/usr/bin/expect --
+
+set SEISAN [lindex $argv 0]
+set db [lindex $argv 1]
+set nordico [lindex $argv 2]
+
+set env(PATH) "$SEISAN/PRO:$SEISAN/EXP:/bin"
+
+#### iniciando split
+spawn $SEISAN/PRO/split
+
+expect "  INPUT FILE NAME"
+send -- "$nordico \r"
+
+###ingresar DB
+expect "    RETURN FOR SPLIT UP IN LOCAL DIRECTORY"
+send -- "$db \r"
+
+##ingresar operador
+expect " OPERATOR ID, MAX 4 CHARS"
+send " geo \r"
+
+####para eventos duplicados
+expect {
+	" Create new events for ALL duplicates: *" {send "N \r"}
+}
+

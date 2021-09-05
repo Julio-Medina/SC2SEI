@@ -1,0 +1,55 @@
+#!/bin/bash
+
+
+#TOP_DIR=${HOME}/INSIVUMEH/SC2SEI
+TOP_DIR=/opt/SC2SEI
+
+
+cd $TOP_DIR
+source $TOP_DIR/sc2sei.conf
+
+export ID=$1
+
+
+_move_wav_(){
+
+        D=$(echo $WAV |awk -F"T" '{print $1}')
+        YY=$(echo $D |awk -F"-" '{print $1}')
+        mm=$(echo $D |awk -F"-" '{print $2}')
+        echo "moviendo $WAV a $YY/$mm"
+        mv -v "$WAV" "$SEISAN_TOP/WAV/$DB/$YY/$mm"
+}
+
+if [[ -z $ID ]]
+then
+#	ssh -q "${SERVER}" "source /home/insivumeh/.seiscomp.bash ; /opt/seiscomp/bin/LIST_EVENTS"
+	source ${HOME}/.seiscomp.bash
+	LIST_EVENTS
+	read ID
+	export ID
+fi
+ 
+echo $ID
+echo $SEISAN_TOP
+echo $DB
+
+mkdir -vp ${TOP_DIR}/${ID}
+cd  ${TOP_DIR}/${ID}
+DIR=$(pwd)
+
+bash ${TOP_DIR}/sc-info.sh -ID ${ID}
+
+
+#### agregar el codigo de python para parcear de xml a nordico
+
+python3 ${TOP_DIR}/SC2SEI.py ${DIR}/
+NORDICO=$(ls *.S*)
+WAV=$(ls *MSEED*)
+
+##### estas dos variables se deben quitar ya que con los output del script de python
+
+
+expect ${TOP_DIR}/split-auto.exp "${SEISAN_TOP}" "${DB}" "${NORDICO}"
+_move_wav_
+
+
