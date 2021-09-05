@@ -5,7 +5,7 @@ Created on Thu May 20 13:04:40 2021
 
 @author: julio
 based on: seiscomp_to_nordic.py
-
+added on git repository on  Sun Sep 05 12:10:00 2021
 """
 # Programa para convertir un boletin de seiscomp acompañado del xml correspondie
 # a formato nordic, este el formato utilizado por SEISAN en los S-Files
