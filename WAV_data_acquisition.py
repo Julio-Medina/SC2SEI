@@ -24,6 +24,8 @@ def RAW_data_acquisition(wave_file_path, outputX_file, sample_dimension, pick_ch
     wave_form_list=[]
     station_list=[]
     channel_list=[]
+    start_time_list=[]
+    event_time_lapse_list=[]
     wave_stream=readStream(wave_file_path)
     #print(len(wave_stream))
     #print(wave_stream.__str__(extended=True))
@@ -53,10 +55,12 @@ def RAW_data_acquisition(wave_file_path, outputX_file, sample_dimension, pick_ch
             wave_form_list.append(normalized_data)
             station_list.append(wave_form.stats.station)
             channel_list.append(wave_form.stats.channel)
+            start_time_list.append(wave_form.stats.starttime)
+            event_time_lapse_list.append(wave_form.stats.endtime-wave_form.stats.starttime)
            
-    return np.array(wave_form_list), station_list, channel_list
+    return np.array(wave_form_list), station_list, channel_list, start_time_list, event_time_lapse_list
 
-C, D, E= RAW_data_acquisition('/home/julio/Documents/SC2SEI/project1/20052021/SC2SEI/insivumeh2021joxb.mseed',
+C, D, E, F ,G= RAW_data_acquisition('/home/julio/Documents/SC2SEI/project1/20052021/SC2SEI/insivumeh2021joxb.mseed',
                            '', 3000, 'E')
     
     
