@@ -5,7 +5,7 @@ Created on Thu May 20 13:04:40 2021
 
 @author: julio
 based on: seiscomp_to_nordic.py
-added on git repository on  Sun Sep 05 12:10:00 2021
+
 """
 # Programa para convertir un boletin de seiscomp acompañado del xml correspondie
 # a formato nordic, este el formato utilizado por SEISAN en los S-Files
@@ -18,6 +18,7 @@ added on git repository on  Sun Sep 05 12:10:00 2021
 from shutil import copyfile #biblioteca para manejo de archivo, especificamente copiar archivos
 from seiscomp_xml_parser import xml_station_list #PARSER XML
 import os # bliblioteca para utlidades de manejo de archivos
+import sys
 
 
 #funcion para agregar espacios en blanco a un string de una longitud determinada
@@ -156,18 +157,20 @@ def seiscomp_to_nordic(files_path,
     #station_number=add_blank(station_number,3)
      
     float_magnitude=float(magnitude)
-    magnitude=f"{float_magnitude:.1f}"     
+    #magnitude=f"{float_magnitude:.1f}"     
+    magnitude="{:.1f}".format(float_magnitude)
     magnitude=add_blank(magnitude,4)
     #s_file=open(sfile_name,'r')
     #s_file_lines=s_file.readlines()
     
     residual_RMS_float=float(residual_RMS)
-    residual_RMS=f"{residual_RMS_float:.1f}"
-    
+    #residual_RMS=f"{residual_RMS_float:.1f}"
+    resdidual_RMS="{:.1f}".format(residual_RMS_float)
     residual_RMS=add_blank(residual_RMS, 4)
     
     ###############################################################################################################
     # se crea la primera linea del s-file, el header
+    month_aux=month # se arreglo bug para meses >=10
     if month[0]=='0':
         month_aux=' '+month[1]
     
@@ -198,12 +201,12 @@ def seiscomp_to_nordic(files_path,
     
     ###############################################################################################################
     #se crea el archivo de salida es decir el s-file resultante, tambien se le agregan las lineas creadas arriba
-    try:
-        os.mkdir(files_path+'/seisan_output/')
-    except:
-        pass
-    copyfile(files_path+wav_file_name,files_path+'/seisan_output/'+seisan_wav_name)
-    s_file_output=open(files_path+'/seisan_output/'+ sfile_name,'w')
+    #try:
+    #    os.mkdir(files_path+'/seisan_output/')
+    #except:
+    #   pass
+    copyfile(files_path+wav_file_name,files_path+seisan_wav_name)
+    s_file_output=open(files_path+ sfile_name,'w')
     ################################################################################################################
     
     
@@ -218,7 +221,7 @@ def seiscomp_to_nordic(files_path,
     #a=station_list_xml[0]
     
     
-    #se intera a traves de las picadas de fase para agregarlas al s-file
+    #se itera a traves de las picadas de fase para agregarlas al s-file
     
     for station_pick in station_list_xml:
         station=add_blank(station_pick[0],5)
@@ -230,20 +233,7 @@ def seiscomp_to_nordic(files_path,
         seconds=station_pick[8]
         phase=station_pick[9]
         
-        """
-        #se relaciona la lista de xml y la lista creada del boletin de seiscomp
-        a,b=find_in_sublists(station_list,add_blank_suffix(station_pick[0],5))
-        
-        azimuth=station_list[a][8]
-        
-        time_residual=station_list[a][4]
-        if time_residual[0]=='-':
-            time_residual=add_blank(station_list[a][4],3)
-        else:
-            time_residual=add_blank(station_list[a][4],4)
-        
-        distance=add_blank(station_list[a][5],4)
-       """ 
+     
         quality_indicator='I'# revisar Apendice A del manual de SEISAN pag 541..
         
         
@@ -257,20 +247,13 @@ def seiscomp_to_nordic(files_path,
     s_file_output.close()    
     print(sfile_name+' '+xml_file_name)
     
+    #return s_file, seisan_wav_name
     
     
     
-"""
-for station_pick in station_list:
-    staion_pick_line=' '+add_blank(station_pick[0],5)+'HZ '+'EP '+station_pick[6][0:1]
-    if station_pick[7]=='A':
-        station_pick_line=staion_pick_line+'A  '
-    else:
-        station_pick_line=staion_pick_line+'  '
-    station_pick_line=station_pick_line+hour+minute+add_blank(seconds,6)+' '
-"""
     
-root_path='./SC2SEI/'
+#root_path='./SC2SEI/'
+root_path=sys.argv[1]
 seicomp_file_list=os.listdir(root_path)
 i=0
 for seiscomp_file in seicomp_file_list:
@@ -285,6 +268,7 @@ for seiscomp_file in seicomp_file_list:
                            seiscomp_file)
     
     
+
 
 
 
