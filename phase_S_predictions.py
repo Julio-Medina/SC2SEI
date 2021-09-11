@@ -15,7 +15,7 @@ from WAV_data_acquisition import RAW_data_acquisition
 
 
 
-def phase_P_picker(wave_forms, start_time_list, event_time_lapse_list, dimension_sample, SeismicNet_model_path):
+def phase_S_picker(wave_forms, start_time_list, event_time_lapse_list, dimension_sample, SeismicNet_model_path):
     wave_form_number=len(wave_forms)
     model=tf.keras.models.load_model(SeismicNet_model_path+'SeismicNet.h5')
     wave_forms_data_set=np.expand_dims(wave_forms, axis=2)
@@ -56,13 +56,26 @@ def phase_P_picker(wave_forms, start_time_list, event_time_lapse_list, dimension
             prediction_p_phase_position=prediction_s_phase_position
             prediction_s_phase_position=aux
         
-        phase_S_arrival_time=start_time_list[i]+prediction_p_phase_position*event_time_lapse_list[i]/dimension_sample
+        phase_S_arrival_time=start_time_list[i]+prediction_s_phase_position*event_time_lapse_list[i]/dimension_sample
         phase_S_arrival_time_list.append(phase_S_arrival_time)
+        
     
     return phase_S_arrival_time_list
+
+def station_list_phase_S(station_list, channel_list, phase_S_arrival_time_list):
+    aux_list=[]
+    for i in range(len(station_list)):
+        aux_list.append([station_list[i],
+                         channel_list[i],
+                         str(phase_S_arrival_time_list[i].hour),
+                         str(phase_S_arrival_time_list[i].minute),
+                         str(phase_S_arrival_time_list[i].second)])
+    return aux_list
+        
 
 C, D, E, F ,G= RAW_data_acquisition('/home/julio/Documents/SC2SEI/project1/20052021/SC2SEI/insivumeh2021joxb.mseed',
                            '', 3000, 'E')
 
-phase_S_arrival_time_list=phase_P_picker(C,F,G,3000,'/home/julio/Documents/NeuralNetworks/2021/models/SeismicNet/')
+phase_S_arrival_time_list=phase_S_picker(C,F,G,3000,'/home/julio/Documents/NeuralNetworks/2021/models/SeismicNet/')
 
+final_list=station_list_phase_S(D, E, phase_S_arrival_time_list)
