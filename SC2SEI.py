@@ -168,6 +168,7 @@ def seiscomp_to_nordic(files_path,
     
     ###############################################################################################################
     # se crea la primera linea del s-file, el header
+    month_aux=month# se arreglo bug con month >=10
     if month[0]=='0':
         month_aux=' '+month[1]
     
