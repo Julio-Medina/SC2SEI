@@ -19,6 +19,8 @@ from shutil import copyfile #biblioteca para manejo de archivo, especificamente 
 from seiscomp_xml_parser import xml_station_list #PARSER XML
 import os # bliblioteca para utlidades de manejo de archivos
 import sys
+from phase_S_predictions import phase_S_picker, station_list_phase_S
+from WAV_data_acquisition import RAW_data_acquisition
 
 
 #funcion para agregar espacios en blanco a un string de una longitud determinada
@@ -220,7 +222,7 @@ def seiscomp_to_nordic(files_path,
     s_file_output.write(picks_header+'\n')
     #a=station_list_xml[0]
     
-    
+    quality_indicator='I'# revisar Apendice A del manual de SEISAN pag 541..
     #se itera a traves de las picadas de fase para agregarlas al s-file
     
     for station_pick in station_list_xml:
@@ -232,17 +234,39 @@ def seiscomp_to_nordic(files_path,
         minute=station_pick[7]
         seconds=station_pick[8]
         phase=station_pick[9]
-        
-     
-        quality_indicator='I'# revisar Apendice A del manual de SEISAN pag 541..
-        
-        
+    
         station_pick_line=' '+add_blank_suffix(station_pick[0],5)+instrument+channel+' '+quality_indicator+phase
         station_pick_line=station_pick_line+'       '+hour+minute+seconds+'0 '
         station_pick_line=add_blank_suffix(station_pick_line,80)#+azimuth[:6]+' '
         #station_pick_line=add_blank_suffix(station_pick_line,63)+time_residual+'    '+distance+'     '
         s_file_output.write(station_pick_line+'\n')
+    
+    #############################################################################################    
+    # Inicia modulo para utilizar modelo de red neuronal SeismicNet para hallar picadas de fase S
+    #############################################################################################
+    
+    ## adquisicion cruda de datos
+    C, D, E, F ,G= RAW_data_acquisition(files_path+wav_file_name,
+                           '', 3000, 'E')
+    # funcion que devuelve lista con picadas de fase S
+    phase_S_arrival_time_list=phase_S_picker(C,F,G,3000,'/home/julio/Documents/NeuralNetworks/2021/models/SeismicNet/')
+    #funcion que devuelve lista final para editar S-file
+    station_list_phaseS=station_list_phase_S(D, E, phase_S_arrival_time_list)
+    phase='S'
+    for station_pick in station_list_phaseS:
+        station=add_blank_suffix(station_pick[0],5)
+        channel=station_pick[1][0]+station_pick[1][2]
+        hour=station_pick[2]
+        minute=station_pick[3]
+        seconds=station_pick[4]
         
+        station_pick_line=' '+station+channel+' '+quality_indicator+phase
+        station_pick_line=station_pick_line+'       '+hour+minute+seconds+'0 '
+        station_pick_line=add_blank_suffix(station_pick_line,80) 
+        s_file_output.write(station_pick_line+'\n')
+    
+    
+    # se edita la ultima linea de S-file    
     s_file_output.write(add_blank(' ',80)+'\n')
     s_file_output.close()    
     print(sfile_name+' '+xml_file_name)

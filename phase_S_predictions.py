@@ -65,11 +65,11 @@ def phase_S_picker(wave_forms, start_time_list, event_time_lapse_list, dimension
 def station_list_phase_S(station_list, channel_list, phase_S_arrival_time_list):
     aux_list=[]
     for i in range(len(station_list)):
-        aux_list.append([station_list[i],
-                         channel_list[i],
-                         str(phase_S_arrival_time_list[i].hour),
-                         str(phase_S_arrival_time_list[i].minute),
-                         str(phase_S_arrival_time_list[i].second)])
+        aux_list.append([station_list[i],                               #0 estacion
+                         channel_list[i],                               #1 tipo de instrumento y canal e.g. HHE
+                         str(phase_S_arrival_time_list[i].hour),        #2 hora del arribo de fase S
+                         str(phase_S_arrival_time_list[i].minute) if len(str(phase_S_arrival_time_list[i].minute))==2  else '0'+str(phase_S_arrival_time_list[i].minute),      #3 minuto del arribo de fase S
+                         (str(phase_S_arrival_time_list[i].second) if len(str(phase_S_arrival_time_list[i].second))==2  else '0'+str(phase_S_arrival_time_list[i].second))+'.'+str(phase_S_arrival_time_list[i].microsecond)[0:2]])     #4 segundo del arribo de fase S
     return aux_list
         
 
