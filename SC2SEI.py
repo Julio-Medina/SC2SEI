@@ -249,7 +249,8 @@ def seiscomp_to_nordic(files_path,
     C, D, E, F ,G= RAW_data_acquisition(files_path+wav_file_name,
                            '', 3000, 'E')
     # funcion que devuelve lista con picadas de fase S
-    phase_S_arrival_time_list=phase_S_picker(C,F,G,3000,'/home/julio/Documents/NeuralNetworks/2021/models/SeismicNet/')
+    #phase_S_arrival_time_list=phase_S_picker(C,F,G,3000,'/home/julio/Documents/NeuralNetworks/2021/models/SeismicNet/')
+    phase_S_arrival_time_list=phase_S_picker(C,F,G,3000,'/home/julio/Documents/SeismicNet/')
     #funcion que devuelve lista final para editar S-file
     station_list_phaseS=station_list_phase_S(D, E, phase_S_arrival_time_list)
     phase='S'

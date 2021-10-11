@@ -49,7 +49,8 @@ def find_in_sublists(lst, value):
 
 
 #sfile_name='/home/julio/Documents/project1/03-1925-42L.S202105'
-files_path='/home/julio/Documents/project1/'# directorio de trabajo
+#files_path='/home/julio/Documents/project1/'# directorio de trabajo
+files_path='/home/julio/Documents/eventos_SEISAN'
 seiscomp_file_name='insivumeh2021jfvi.txt'#nombre del boletin generado en seiscomp
 wav_file_name='insivumeh2021jfvi.mseed' #nombre del archivo wav al que apunta el s-file
 xml_file_name='insivumeh2021jfvi.xml' #xml generado por seiscomp, en este xml se tiene informacion de las arribos de ondas sismicas

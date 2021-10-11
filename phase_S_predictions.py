@@ -73,9 +73,9 @@ def station_list_phase_S(station_list, channel_list, phase_S_arrival_time_list):
     return aux_list
         
 
-C, D, E, F ,G= RAW_data_acquisition('/home/julio/Documents/SC2SEI/project1/20052021/SC2SEI/insivumeh2021joxb.mseed',
+#C, D, E, F ,G= RAW_data_acquisition('/home/julio/Documents/SC2SEI/project1/20052021/SC2SEI/insivumeh2021joxb.mseed',
                            '', 3000, 'E')
 
-phase_S_arrival_time_list=phase_S_picker(C,F,G,3000,'/home/julio/Documents/NeuralNetworks/2021/models/SeismicNet/')
+#phase_S_arrival_time_list=phase_S_picker(C,F,G,3000,'/home/julio/Documents/NeuralNetworks/2021/models/SeismicNet/')
 
-final_list=station_list_phase_S(D, E, phase_S_arrival_time_list)
+#final_list=station_list_phase_S(D, E, phase_S_arrival_time_list)
