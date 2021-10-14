@@ -52,16 +52,17 @@ def RAW_data_acquisition(wave_file_path, outputX_file, sample_dimension, pick_ch
             #se normalizan los datos como (X-mean)/(max-min), convencion de machine learning
             normalized_data=(wave_form.data-wave_form.data.mean())/(wave_form.data.max()-wave_form.data.min())# se normalizan los datos para que el entrenamiento convega
             #datos de mseed para predecir fases S
-            wave_form_list.append(normalized_data)
-            station_list.append(wave_form.stats.station)
-            channel_list.append(wave_form.stats.channel)
-            start_time_list.append(wave_form.stats.starttime)
-            event_time_lapse_list.append(wave_form.stats.endtime-wave_form.stats.starttime)
+            if wave_form.stats not in station_list:
+                 wave_form_list.append(normalized_data)
+                 station_list.append(wave_form.stats.station)
+                 channel_list.append(wave_form.stats.channel)
+                 start_time_list.append(wave_form.stats.starttime)
+                 event_time_lapse_list.append(wave_form.stats.endtime-wave_form.stats.starttime)
            
     return np.array(wave_form_list), station_list, channel_list, start_time_list, event_time_lapse_list
 
-C, D, E, F ,G= RAW_data_acquisition('/home/julio/Documents/SC2SEI/project1/20052021/SC2SEI/insivumeh2021joxb.mseed',
-                           '', 3000, 'E')
+#C, D, E, F ,G= RAW_data_acquisition('/home/julio/Documents/SC2SEI/project1/20052021/SC2SEI/insivumeh2021joxb.mseed',
+#                          '', 3000, 'E')
     
     
     

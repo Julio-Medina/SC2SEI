@@ -67,14 +67,14 @@ def station_list_phase_S(station_list, channel_list, phase_S_arrival_time_list):
     for i in range(len(station_list)):
         aux_list.append([station_list[i],                               #0 estacion
                          channel_list[i],                               #1 tipo de instrumento y canal e.g. HHE
-                         str(phase_S_arrival_time_list[i].hour),        #2 hora del arribo de fase S
+                         #str(phase_S_arrival_time_list[i].hour),        #2 hora del arribo de fase S
+                         str(phase_S_arrival_time_list[i].hour) if len(str(phase_S_arrival_time_list[i].hour))==2  else '0'+str(phase_S_arrival_time_list[i].hour), 
                          str(phase_S_arrival_time_list[i].minute) if len(str(phase_S_arrival_time_list[i].minute))==2  else '0'+str(phase_S_arrival_time_list[i].minute),      #3 minuto del arribo de fase S
                          (str(phase_S_arrival_time_list[i].second) if len(str(phase_S_arrival_time_list[i].second))==2  else '0'+str(phase_S_arrival_time_list[i].second))+'.'+str(phase_S_arrival_time_list[i].microsecond)[0:2]])     #4 segundo del arribo de fase S
     return aux_list
         
 
-#C, D, E, F ,G= RAW_data_acquisition('/home/julio/Documents/SC2SEI/project1/20052021/SC2SEI/insivumeh2021joxb.mseed',
-                           '', 3000, 'E')
+#C, D, E, F ,G= RAW_data_acquisition('/home/julio/Documents/SC2SEI/project1/20052021/SC2SEI/insivumeh2021joxb.mseed', '', 3000, 'E')
 
 #phase_S_arrival_time_list=phase_S_picker(C,F,G,3000,'/home/julio/Documents/NeuralNetworks/2021/models/SeismicNet/')
 
